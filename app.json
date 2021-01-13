@@ -3,6 +3,7 @@
     "name": "ReactNative-Expo-Firebase-MemoApp",
     "slug": "ReactNative-Expo-Firebase-MemoApp",
     "version": "1.0.0",
+    "privacy": "unlisted", // Expoのページで非公開になる
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -13,9 +14,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
