@@ -19,7 +19,7 @@ export default function MemoDetailScreen() {
           eveniet perferendis.
         </Text>
       </ScrollView>
-      <CircleButton style={styles.memoEditButton}>+</CircleButton>
+      <CircleButton style={styles.memoEditButton} name="plus" />
     </View>
   )
 }
