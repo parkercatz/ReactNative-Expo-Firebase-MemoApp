@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -10,12 +10,34 @@ import Button from '../components/Button'
 
 export default function LogInScreen(props) {
   const { navigation } = props
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
         <Text style={styles.title}>Log In</Text>
-        <TextInput style={styles.textInput} value="Email Address" />
-        <TextInput style={styles.textInput} value="Password" />
+        <TextInput
+          style={styles.textInput}
+          value={email}
+          onChangeText={(text) => {
+            setEmail(text)
+          }}
+          autoCapitalize="none"
+          keyboardType="email-address"
+          placeholder="Email Address"
+          textContentType="emailAddress"
+        />
+        <TextInput
+          style={styles.textInput}
+          value={password}
+          onChangeText={(text) => {
+            setPassword(text)
+          }}
+          autoCapitalize="none"
+          placeholder="Passwprd"
+          secureTextEntry
+          textContentType="password"
+        />
         <Button
           label="Submit"
           onPress={() => {
