@@ -21,7 +21,7 @@ export default function MemoEditScreen(props) {
             bodyText: body,
             updatedAt: new Date(),
           },
-          { merge: true }
+          { merge: true } // 他のデータを上書きしたくない場合
         )
         .then(() => {
           navigation.goBack()
