@@ -1,22 +1,45 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import CircleButton from '../components/CircleButton'
+import { shape, string } from 'prop-types'
+import firebase from 'firebase'
+import { dateToString } from '../utils'
 
 export default function MemoDetailScreen(props) {
-  const { navigation } = props
+  const { navigation, route } = props
+  const { id } = route.params
+  const [memo, setMemo] = useState(null)
+
+  useEffect(() => {
+    const { currentUser } = firebase.auth()
+    let unsubscribe = () => {}
+    if (currentUser) {
+      const db = firebase.firestore()
+      const ref = db.collection(`users/${currentUser.uid}/memos`).doc(id) // 単一のドキュメントのリファレンスを取得（route.params）
+      unsubscribe = ref.onSnapshot((doc) => {
+        const data = doc.data()
+        setMemo({
+          id: doc.id,
+          bodyText: data.bodyText,
+          updatedAt: data.updatedAt.toDate(),
+        })
+      })
+    }
+    return unsubscribe
+  }, [])
+
   return (
     <View style={styles.container}>
       <View style={styles.memoHeader}>
-        <Text style={styles.memoTitle}>買い物リスト</Text>
-        <Text style={styles.memoDate}>2021年1月11日 11:00</Text>
+        <Text style={styles.memoTitle} numberOfLines={1}>
+          {memo && memo.bodyText}
+        </Text>
+        <Text style={styles.memoDate}>
+          {memo && dateToString(memo.updatedAt)}
+        </Text>
       </View>
       <ScrollView style={styles.memoBody}>
-        <Text style={styles.memoText}>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus,
-          itaque ipsam non quos quibusdam ut eligendi doloribus ipsum voluptas
-          quaerat, optio nesciunt soluta perferendis eum ullam? Similique amet
-          eveniet perferendis.
-        </Text>
+        <Text style={styles.memoText}>{memo && memo.bodyText}</Text>
       </ScrollView>
       <CircleButton
         style={styles.memoEditButton}
@@ -27,6 +50,14 @@ export default function MemoDetailScreen(props) {
       />
     </View>
   )
+}
+
+MemoDetailScreen.propTypes = {
+  route: shape({
+    params: shape({
+      id: string,
+    }),
+  }).isRequired,
 }
 
 const styles = StyleSheet.create({
