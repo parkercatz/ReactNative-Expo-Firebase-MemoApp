@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import firebase from 'firebase'
 import Button from '../components/Button'
+import { translateErrors } from '../utils'
 
 export default function SignUpScreen(props) {
   const { navigation } = props
@@ -31,7 +32,8 @@ export default function SignUpScreen(props) {
       // 会員登録が失敗した場合
       .catch((error) => {
         console.log(error.message)
-        Alert.alert(error.code)
+        const errorMessage = translateErrors(error.code)
+        Alert.alert(errorMessage.title, errorMessage.description)
       })
   }
 
