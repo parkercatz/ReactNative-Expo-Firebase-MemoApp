@@ -6,10 +6,12 @@ import MemoList from '../components/MemoList'
 import CircleButton from '../components/CircleButton'
 import LogOutButton from '../components/LogOutButton'
 import Button from '../components/Button'
+import Loading from '../components/Loading'
 
 export default function MemoListScreen(props) {
   const { navigation } = props
   const [memos, setMemos] = useState([])
+  const [isLoading, setLoading] = useState(false)
 
   useEffect(() => {
     navigation.setOptions({
@@ -23,6 +25,7 @@ export default function MemoListScreen(props) {
     const { currentUser } = firebase.auth() // ログインしているユーザーの取得
     let unsubscribe = () => {} // ユーザーがログアウト、期限切れした場合などで空関数で実行させる *1
     if (currentUser) {
+      setLoading(true)
       const ref = db
         .collection(`users/${currentUser.uid}/memos`) // ユーザーごとのコレクションを取得
         .orderBy('updatedAt', 'desc') // 降順
@@ -42,9 +45,11 @@ export default function MemoListScreen(props) {
             })
           })
           setMemos(userMemos) // 加工したメモが入った配列をsetMemosを使用してmemosとして保存
+          setLoading(false)
         },
         (error) => {
           console.log(error)
+          setLoading(false)
           Alert.alert('データの読み込みに失敗しました。')
         }
       )
@@ -56,6 +61,7 @@ export default function MemoListScreen(props) {
   if (memos.length === 0) {
     return (
       <View style={emptyStyles.container}>
+        <Loading isLoading={isLoading} />
         <View style={emptyStyles.inner}>
           <Text style={emptyStyles.title}>最初のメモを作成しよう！</Text>
           <Button
