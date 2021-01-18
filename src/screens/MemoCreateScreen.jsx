@@ -1,30 +1,32 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, TextInput } from 'react-native'
-import CircleButton from '../components/CircleButton'
-import KeyboardSafeView from '../components/KeyboardSafeView'
-import firebase from 'firebase'
+import React, { useState } from 'react';
+import {
+  View, StyleSheet, TextInput, Alert,
+} from 'react-native';
+import firebase from 'firebase';
+import CircleButton from '../components/CircleButton';
+import KeyboardSafeView from '../components/KeyboardSafeView';
+import { translateErrors } from '../utils';
 
 export default function MemoCreateScreen(props) {
-  const { navigation } = props
-  const [bodyText, setBodyText] = useState('')
+  const { navigation } = props;
+  const [bodyText, setBodyText] = useState('');
 
   function handlePress() {
-    const { currentUser } = firebase.auth() // ログインしているユーザー
-    const db = firebase.firestore() // firestoreの参照
-    const ref = db.collection(`users/${currentUser.uid}/memos`) // ユーザーごとのコレクションを取得
+    const { currentUser } = firebase.auth(); // ログインしているユーザー
+    const db = firebase.firestore(); // firestoreの参照
+    const ref = db.collection(`users/${currentUser.uid}/memos`); // ユーザーごとのコレクションを取得
     ref
       .add({
         bodyText,
         updatedAt: new Date(),
       })
-      // 作成されたドキュメントへのリファレンスを参照
-      .then((docRef) => {
-        console.log('created', docRef.id)
-        navigation.goBack()
+      .then(() => {
+        navigation.goBack();
       })
       .catch((error) => {
-        console.log('error', error)
-      })
+        const errorMessage = translateErrors(error.code);
+        Alert.alert(errorMessage.title, errorMessage.description);
+      });
   }
 
   return (
@@ -36,13 +38,13 @@ export default function MemoCreateScreen(props) {
           autoFocus
           style={styles.textInput}
           onChangeText={(text) => {
-            setBodyText(text)
+            setBodyText(text);
           }}
         />
       </View>
       <CircleButton name="check" onPress={handlePress} />
     </KeyboardSafeView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -60,4 +62,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
   },
-})
+});

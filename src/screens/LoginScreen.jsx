@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,17 +6,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-} from 'react-native'
-import firebase from 'firebase'
-import Button from '../components/Button'
-import Loading from '../components/Loading'
-import { translateErrors } from '../utils'
+} from 'react-native';
+import firebase from 'firebase';
+import Button from '../components/Button';
+import Loading from '../components/Loading';
+import { translateErrors } from '../utils';
 
 export default function LogInScreen(props) {
-  const { navigation } = props
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setLoading] = useState(true)
+  const { navigation } = props;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     // ユーザーの状態を監視（画面が消える瞬間に実行）
@@ -26,34 +26,32 @@ export default function LogInScreen(props) {
         navigation.reset({
           index: 0,
           routes: [{ name: 'MemoList' }],
-        })
+        });
       } else {
-        setLoading(false)
+        setLoading(false);
       }
-    })
-    return unsubscribe // return f()でユーザーの監視状態をキャンセルさせる
-  }, []) //　[]を入れておくと一度だけcallbackを実行
+    });
+    return unsubscribe; // return f()でユーザーの監視状態をキャンセルさせる
+  }, []); // []を入れておくと一度だけcallbackを実行
 
   function handlePress() {
-    setLoading(true)
+    setLoading(true);
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        const { user } = userCredential
-        console.log(user.uid)
+      .then(() => {
         navigation.reset({
           index: 0,
           routes: [{ name: 'MemoList' }],
-        })
+        });
       })
       .catch((error) => {
-        const errorMessage = translateErrors(error.code)
-        Alert.alert(errorMessage.title, errorMessage.description)
+        const errorMessage = translateErrors(error.code);
+        Alert.alert(errorMessage.title, errorMessage.description);
       })
       .then(() => {
-        setLoading(false)
-      })
+        setLoading(false);
+      });
   }
 
   return (
@@ -65,7 +63,7 @@ export default function LogInScreen(props) {
           style={styles.textInput}
           value={email}
           onChangeText={(text) => {
-            setEmail(text)
+            setEmail(text);
           }}
           autoCapitalize="none"
           keyboardType="email-address"
@@ -76,7 +74,7 @@ export default function LogInScreen(props) {
           style={styles.textInput}
           value={password}
           onChangeText={(text) => {
-            setPassword(text)
+            setPassword(text);
           }}
           autoCapitalize="none"
           placeholder="Passwprd"
@@ -91,7 +89,7 @@ export default function LogInScreen(props) {
               navigation.reset({
                 index: 0,
                 routes: [{ name: 'SignUp' }],
-              })
+              });
             }}
           >
             <Text style={styles.footerLink}>Sign up here!</Text>
@@ -99,7 +97,7 @@ export default function LogInScreen(props) {
         </View>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -140,4 +138,4 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: '#467fd3',
   },
-})
+});

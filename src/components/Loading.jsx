@@ -1,12 +1,12 @@
-import React from 'react'
-import { View, ActivityIndicator, StyleSheet } from 'react-native'
-import { bool } from 'prop-types'
+import React from 'react';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { bool } from 'prop-types';
 
-export default Loading = (props) => {
-  const { isLoading } = props
+export default function Loading(props) {
+  const { isLoading } = props;
   // ローディング中でなければ何も表示しない
   if (!isLoading) {
-    return null
+    return null;
   }
 
   return (
@@ -15,16 +15,16 @@ export default Loading = (props) => {
         <ActivityIndicator size="large" color="#000" />
       </View>
     </View>
-  )
+  );
 }
 
 Loading.propTypes = {
   isLoading: bool,
-}
+};
 
 Loading.defaultProps = {
   isLoading: false,
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
   inner: {
     marginBottom: 80,
   },
-})
+});

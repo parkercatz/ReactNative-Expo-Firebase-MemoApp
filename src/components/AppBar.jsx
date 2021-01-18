@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
 export default function AppBar() {
   return (
@@ -9,7 +9,7 @@ export default function AppBar() {
         <Text style={styles.appBarRight}>ログアウト</Text>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -35,4 +35,4 @@ const styles = StyleSheet.create({
     lineHeight: 32,
     color: '#fff',
   },
-})
+});

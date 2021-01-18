@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,35 +6,32 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-} from 'react-native'
-import firebase from 'firebase'
-import Button from '../components/Button'
-import { translateErrors } from '../utils'
+} from 'react-native';
+import firebase from 'firebase';
+import Button from '../components/Button';
+import { translateErrors } from '../utils';
 
 export default function SignUpScreen(props) {
-  const { navigation } = props
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const { navigation } = props;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   function handlePress() {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password) // 会員登録
       // 会員登録が成功した場合
-      .then((userCredential) => {
-        const { user } = userCredential // userの情報を取得
-        console.log(user.uid)
+      .then(() => {
         navigation.reset({
           index: 0,
           routes: [{ name: 'MemoList' }],
-        })
+        });
       })
       // 会員登録が失敗した場合
       .catch((error) => {
-        console.log(error.message)
-        const errorMessage = translateErrors(error.code)
-        Alert.alert(errorMessage.title, errorMessage.description)
-      })
+        const errorMessage = translateErrors(error.code);
+        Alert.alert(errorMessage.title, errorMessage.description);
+      });
   }
 
   return (
@@ -45,7 +42,7 @@ export default function SignUpScreen(props) {
           style={styles.textInput}
           value={email}
           onChangeText={(text) => {
-            setEmail(text)
+            setEmail(text);
           }}
           autoCapitalize="none"
           keyboardType="email-address"
@@ -56,7 +53,7 @@ export default function SignUpScreen(props) {
           style={styles.textInput}
           value={password}
           onChangeText={(text) => {
-            setPassword(text)
+            setPassword(text);
           }}
           autoCapitalize="none"
           placeholder="Passwprd"
@@ -71,7 +68,7 @@ export default function SignUpScreen(props) {
               navigation.reset({
                 index: 0,
                 routes: [{ name: 'LogIn' }],
-              })
+              });
             }}
           >
             <Text style={styles.footerLink}>Log In.</Text>
@@ -79,7 +76,7 @@ export default function SignUpScreen(props) {
         </View>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -120,4 +117,4 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: '#467fd3',
   },
-})
+});

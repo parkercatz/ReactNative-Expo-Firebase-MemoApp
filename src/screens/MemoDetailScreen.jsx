@@ -1,32 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
-import CircleButton from '../components/CircleButton'
-import { shape, string } from 'prop-types'
-import firebase from 'firebase'
-import { dateToString } from '../utils'
+import React, { useEffect, useState } from 'react';
+import {
+  View, Text, ScrollView, StyleSheet,
+} from 'react-native';
+import { shape, string } from 'prop-types';
+import firebase from 'firebase';
+import CircleButton from '../components/CircleButton';
+import { dateToString } from '../utils';
 
 export default function MemoDetailScreen(props) {
-  const { navigation, route } = props
-  const { id } = route.params
-  const [memo, setMemo] = useState(null)
+  const { navigation, route } = props;
+  const { id } = route.params;
+  const [memo, setMemo] = useState(null);
 
   useEffect(() => {
-    const { currentUser } = firebase.auth()
-    let unsubscribe = () => {}
+    const { currentUser } = firebase.auth();
+    let unsubscribe = () => {};
     if (currentUser) {
-      const db = firebase.firestore()
-      const ref = db.collection(`users/${currentUser.uid}/memos`).doc(id) // 単一のドキュメントのリファレンスを取得（route.params）
+      const db = firebase.firestore();
+      const ref = db.collection(`users/${currentUser.uid}/memos`).doc(id); // 単一のドキュメントのリファレンスを取得（route.params）
       unsubscribe = ref.onSnapshot((doc) => {
-        const data = doc.data()
+        const data = doc.data();
         setMemo({
           id: doc.id,
           bodyText: data.bodyText,
           updatedAt: data.updatedAt.toDate(),
-        })
-      })
+        });
+      });
     }
-    return unsubscribe
-  }, [])
+    return unsubscribe;
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -48,11 +50,11 @@ export default function MemoDetailScreen(props) {
           navigation.navigate('MemoEdit', {
             id: memo.id,
             bodyText: memo.bodyText,
-          })
+          });
         }}
       />
     </View>
-  )
+  );
 }
 
 MemoDetailScreen.propTypes = {
@@ -61,7 +63,7 @@ MemoDetailScreen.propTypes = {
       id: string,
     }),
   }).isRequired,
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -98,4 +100,4 @@ const styles = StyleSheet.create({
     top: 60,
     bottom: 'auto',
   },
-})
+});
